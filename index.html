@@ -1,14 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AI Content Studio Pro</title>
-<script src="https://tailwindcss.com"></script>
-<script src="https://unpkg.com"></script>
-<script src="https://unpkg.com"></script>
-<script src="https://unpkg.com"></script>
-<script src="https://unpkg.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
 .glass { background: rgba(17,24,39,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
 body { background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); min-height: 100vh; }
@@ -46,13 +47,12 @@ if(window.lucide) window.lucide.createIcons();
 const generateScript = async () => {
 if (!topic.trim()) return;
 setStep('loading');
-
+setTimeout(() => {
 const generatedScript = [
 { text: `Hook: Why ${topic} is changing everything we know.` },
 { text: "Body: Deep diving into the core secret behind this amazing process." },
 { text: "CTA: If you like this breakdown, follow for more updates!" }
 ];
-
 const generatedSeo = {
 titles: [
 `🔥 This Secret About ${topic} Will Blow Your Mind!`,
@@ -62,8 +62,6 @@ titles: [
 tags: `${topic.toLowerCase().replace(/\s+/g, '')}, aitools, viralvlog, contentcreator, tutorial`,
 desc: `In this video, we uncover the hidden truths about ${topic}. Make sure to like, comment, and subscribe for more premium tech updates!`
 };
-
-// প্রোজেক্ট সেভ করার নতুন লজিক
 const newProject = {
 id: Date.now(),
 title: topic,
@@ -71,23 +69,20 @@ date: new Date().toLocaleDateString(),
 script: generatedScript,
 seo: generatedSeo
 };
-
 const updatedProjects = [newProject, ...savedProjects];
 setSavedProjects(updatedProjects);
 localStorage.setItem('vlog_projects', JSON.stringify(updatedProjects));
-
 setScript(generatedScript);
 setSeoData(generatedSeo);
-setActive(0); 
-setStep(2);
+setActive(0); setStep(2);
+}, 1500);
 };
 
 const loadProject = (proj) => {
 setTopic(proj.title);
 setScript(proj.script);
 setSeoData(proj.seo);
-setActive(0);
-setStep(2);
+setActive(0); setStep(2);
 };
 
 const deleteProject = (id, e) => {
@@ -146,19 +141,17 @@ return (
 <input className="w-full bg-slate-900 p-4 rounded-xl border border-white/10 text-white placeholder-slate-500" placeholder="What's your vlog about?" value={topic} onChange={e => setTopic(e.target.value)} />
 <button onClick={generateScript} disabled={!topic.trim()} className="w-full bg-white text-black py-4 rounded-xl font-bold">Generate Script</button>
 </div>
-
-{/* সেভ করা প্রোজেক্ট দেখার প্যানেল */}
 {savedProjects.length > 0 && (
 <div className="space-y-3">
 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5"><i data-lucide="folder-heart" className="w-4 h-4 text-indigo-400"></i> Saved Projects</h3>
 <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto pr-1">
-{savedProjects.map((proj) => (
-<div key={proj.id} onClick={() => loadProject(proj)} className="flex justify-between items-center bg-slate-900/40 hover:bg-slate-900 p-4 rounded-2xl border border-white/5 text-sm cursor-pointer transition">
+{savedProjects.map((p) => (
+<div key={p.id} onClick={() => loadProject(p)} className="flex justify-between items-center bg-slate-900/40 hover:bg-slate-900 p-4 rounded-2xl border border-white/5 text-sm cursor-pointer transition">
 <div className="flex flex-col text-left">
-<span className="font-bold text-white truncate max-w-xs">{proj.title}</span>
-<span className="text-[10px] text-slate-500">{proj.date}</span>
+<span className="font-bold text-white truncate max-w-xs">{p.title}</span>
+<span className="text-[10px] text-slate-500">{p.date}</span>
 </div>
-<button onClick={(e) => deleteProject(proj.id, e)} className="text-red-400 hover:text-red-300 p-2 hover:bg-slate-950 rounded-xl transition"><i data-lucide="trash-2" className="w-4 h-4"></i></button>
+<button onClick={(e) => deleteProject(p.id, e)} className="text-red-400 hover:text-red-300 p-2 hover:bg-slate-950 rounded-xl transition"><i data-lucide="trash-2" className="w-4 h-4"></i></button>
 </div>
 ))}
 </div>
@@ -189,7 +182,7 @@ return (
 </div>
 )}
 {step === 3 && seoData && (
-<div className="glass p-6 sm:p-8 rounded-3xl space-y-6 text-left">
+<div className="glass p-6 sm:p-8 rounded-3xl space-y-6 text-left animate-in fade-in duration-200">
 <h2 className="text-xl font-bold text-center text-indigo-400">🔥 AI Video SEO Optimizer</h2>
 <div className="space-y-3">
 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Suggested Viral Titles</h3>
